@@ -1,0 +1,16 @@
+.section{padding:4rem 0 6rem}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.formTitle{font-family:var(--ff-display);font-size:1.4rem;font-weight:700;color:var(--dark);margin-bottom:1.5rem;padding-bottom:.75rem;border-bottom:2px solid var(--gold)}
+.form{background:var(--warm-white);border:1px solid var(--border);padding:2rem}
+.successMsg{background:var(--warm-white);border:1px solid var(--border);padding:3rem;text-align:center}
+.successMsg span{font-size:3rem;display:block;margin-bottom:1rem}
+.successMsg h3{font-family:var(--ff-display);font-size:1.5rem;color:var(--dark);margin-bottom:.5rem}
+.successMsg p{font-size:.9rem;color:var(--muted)}
+.contactItem{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.2rem;padding-bottom:1.2rem;border-bottom:1px solid var(--border)}
+.contactItem:last-of-type{border-bottom:none}
+.contactItem > span{font-size:1.3rem;flex-shrink:0;margin-top:.1rem}
+.contactItem strong{display:block;font-family:var(--ff-caps);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.2rem}
+.contactItem p{font-size:.85rem;color:var(--text-light);font-family:var(--ff-body);line-height:1.5}
+.waBtn{width:100%;margin-bottom:1.5rem;justify-content:center}
+.map{overflow:hidden;border:1px solid var(--border)}

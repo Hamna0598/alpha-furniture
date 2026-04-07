@@ -1,0 +1,26 @@
+/*!**********************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[7].use[3]!./app/about/about.module.css ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************/
+.about_section__4WtBQ{padding:4rem 0 6rem}
+.about_grid__SnAM_{display:grid;grid-template-columns:1fr 1fr;grid-gap:4rem;gap:4rem;align-items:center;margin-bottom:4rem}
+@media(max-width:900px){.about_grid__SnAM_{grid-template-columns:1fr}}
+.about_imgSide__HdCGG{overflow:hidden}
+.about_aboutImg__fsHgm{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+.about_stats__hQvr4{display:grid;grid-template-columns:repeat(4,1fr);grid-gap:1rem;gap:1rem;margin-top:1.5rem}
+@media(max-width:600px){.about_stats__hQvr4{grid-template-columns:repeat(2,1fr)}}
+.about_stat__KDGQB{text-align:center;padding:1rem;background:var(--warm-white);border:1px solid var(--border)}
+.about_stat__KDGQB strong{display:block;font-family:var(--ff-display);font-size:1.5rem;font-weight:700;color:var(--gold)}
+.about_stat__KDGQB span{font-family:var(--ff-caps);font-size:.58rem;letter-spacing:.15em;color:var(--muted);text-transform:uppercase}
+.about_valuesGrid__CNhil{display:grid;grid-template-columns:repeat(4,1fr);grid-gap:1.5rem;gap:1.5rem;margin-bottom:3rem}
+@media(max-width:900px){.about_valuesGrid__CNhil{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:500px){.about_valuesGrid__CNhil{grid-template-columns:1fr}}
+.about_valueCard__EJ9lk{background:var(--warm-white);border:1px solid var(--border);padding:1.8rem;transition:all .3s}
+.about_valueCard__EJ9lk:hover{border-color:var(--gold);transform:translateY(-4px);box-shadow:0 12px 30px rgba(0,0,0,.08)}
+.about_valueIcon__X7AhC{font-size:1.8rem;display:block;margin-bottom:.8rem}
+.about_valueCard__EJ9lk h3{font-family:var(--ff-display);font-size:1rem;font-weight:700;color:var(--dark);margin-bottom:.5rem}
+.about_valueCard__EJ9lk p{font-size:.8rem;color:var(--muted);line-height:1.7}
+.about_visitBox__12zac{background:var(--dark);padding:2.5rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;border-left:4px solid var(--gold)}
+.about_visitBox__12zac h3{font-family:var(--ff-display);font-size:1.3rem;font-weight:700;color:var(--ivory);margin-bottom:.8rem}
+.about_visitBox__12zac p{font-size:.85rem;color:rgba(255,255,255,.55);font-family:var(--ff-body);margin-bottom:.3rem}
+.about_visitBox__12zac a{color:var(--gold);text-decoration:none}
+
