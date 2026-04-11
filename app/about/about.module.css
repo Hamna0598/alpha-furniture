@@ -1,22 +1,27 @@
-.section{padding:4rem 0 6rem}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;margin-bottom:4rem}
+.section{padding:5rem 0 7rem}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:4.5rem;align-items:center;margin-bottom:4.5rem}
 @media(max-width:900px){.grid{grid-template-columns:1fr}}
 .imgSide{overflow:hidden}
-.aboutImg{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+.aboutImg{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;transition:transform .7s cubic-bezier(.4,0,.2,1)}
+.imgSide:hover .aboutImg{transform:scale(1.03)}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:1.5rem}
 @media(max-width:600px){.stats{grid-template-columns:repeat(2,1fr)}}
-.stat{text-align:center;padding:1rem;background:var(--warm-white);border:1px solid var(--border)}
-.stat strong{display:block;font-family:var(--ff-display);font-size:1.5rem;font-weight:700;color:var(--gold)}
-.stat span{font-family:var(--ff-caps);font-size:.58rem;letter-spacing:.15em;color:var(--muted);text-transform:uppercase}
-.valuesGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-bottom:3rem}
+.stat{text-align:center;padding:1.25rem 1rem;background:var(--warm-white);border:1px solid var(--border);transition:all .3s}
+.stat:hover{border-color:var(--gold-border);box-shadow:0 8px 24px rgba(0,0,0,.07)}
+.stat strong{display:block;font-family:var(--ff-display);font-size:1.7rem;font-weight:700;color:var(--gold-dark);letter-spacing:-.02em}
+.stat span{font-family:var(--ff-caps);font-size:.56rem;letter-spacing:.18em;color:var(--muted);text-transform:uppercase}
+.valuesGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-bottom:3.5rem}
 @media(max-width:900px){.valuesGrid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:500px){.valuesGrid{grid-template-columns:1fr}}
-.valueCard{background:var(--warm-white);border:1px solid var(--border);padding:1.8rem;transition:all .3s}
-.valueCard:hover{border-color:var(--gold);transform:translateY(-4px);box-shadow:0 12px 30px rgba(0,0,0,.08)}
-.valueIcon{font-size:1.8rem;display:block;margin-bottom:.8rem}
-.valueCard h3{font-family:var(--ff-display);font-size:1rem;font-weight:700;color:var(--dark);margin-bottom:.5rem}
-.valueCard p{font-size:.8rem;color:var(--muted);line-height:1.7}
-.visitBox{background:var(--dark);padding:2.5rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;border-left:4px solid var(--gold)}
-.visitBox h3{font-family:var(--ff-display);font-size:1.3rem;font-weight:700;color:var(--ivory);margin-bottom:.8rem}
-.visitBox p{font-size:.85rem;color:rgba(255,255,255,.55);font-family:var(--ff-body);margin-bottom:.3rem}
-.visitBox a{color:var(--gold);text-decoration:none}
+.valueCard{background:var(--warm-white);border:1px solid var(--border);padding:2rem;transition:all .35s;position:relative;overflow:hidden}
+.valueCard::before{content:'';position:absolute;top:0;left:0;width:0;height:2px;background:linear-gradient(90deg,var(--gold-dark),var(--gold),var(--gold-light),transparent);transition:width .5s ease}
+.valueCard:hover::before{width:100%}
+.valueCard:hover{border-color:var(--gold-border);transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,.1),0 4px 12px rgba(212,168,67,.08)}
+.valueIcon{font-size:1.9rem;display:block;margin-bottom:.9rem}
+.valueCard h3{font-family:var(--ff-display);font-size:1.05rem;font-weight:700;color:var(--dark);margin-bottom:.5rem;letter-spacing:-.01em}
+.valueCard p{font-size:.8rem;color:var(--muted);line-height:1.75}
+.visitBox{background:linear-gradient(135deg,var(--dark-2) 0%,var(--dark-3) 100%);border:1px solid rgba(212,168,67,.12);border-left:4px solid var(--gold);padding:2.75rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;box-shadow:0 8px 32px rgba(0,0,0,.12)}
+.visitBox h3{font-family:var(--ff-display);font-size:1.4rem;font-weight:700;color:var(--ivory);margin-bottom:.85rem;letter-spacing:-.02em}
+.visitBox p{font-size:.85rem;color:rgba(255,255,255,.5);font-family:var(--ff-body);margin-bottom:.35rem;line-height:1.7}
+.visitBox a{color:var(--gold);text-decoration:none;transition:color .3s}
+.visitBox a:hover{color:var(--gold-light)}

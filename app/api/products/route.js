@@ -1,22 +1,46 @@
 import { NextResponse } from 'next/server';
-import products from '@/lib/products';
+import { fetchProducts } from '@/lib/supabase';
 
 export async function GET(request) {
-  const { searchParams } = new URL(request.url);
-  const category = searchParams.get('category');
-  const search   = searchParams.get('search');
-  const featured = searchParams.get('featured');
-  const sort     = searchParams.get('sort');
+  try {
+    const { searchParams } = new URL(request.url);
+    const filters = {
+      category: searchParams.get('category') || undefined,
+      featured:  searchParams.get('featured') === 'true' ? true : undefined,
+      search:   searchParams.get('search') || undefined,
+      sort:     searchParams.get('sort') || undefined,
+    };
 
-  let result = [...products];
-  if (category) result = result.filter(p => p.category === category);
-  if (featured) result = result.filter(p => p.isFeatured);
-  if (search)   result = result.filter(p =>
-    p.name.toLowerCase().includes(search.toLowerCase()) ||
-    p.category.toLowerCase().includes(search.toLowerCase())
-  );
-  if (sort === 'price-asc')  result.sort((a,b) => a.price - b.price);
-  if (sort === 'price-desc') result.sort((a,b) => b.price - a.price);
+    const rawData = await fetchProducts(filters);
 
-  return NextResponse.json({ success:true, data:result });
+    // Normalize Supabase column names back to camelCase for the frontend
+    const data = rawData.map(p => ({
+      id:            p.id,
+      name:          p.name,
+      slug:          p.slug,
+      category:      p.category,
+      subcategory:   p.subcategory,
+      price:         p.price,
+      originalPrice: p.original_price,
+      badge:         p.badge,
+      inStock:       p.in_stock,
+      stockQty:      p.stock_qty,
+      rating:        p.rating,
+      reviewCount:   p.review_count,
+      isFeatured:    p.is_featured,
+      isNew:         p.is_new,
+      description:   p.description,
+      images:        p.images || [],
+      colors:        p.colors || [],
+      specifications: p.specifications || {},
+    }));
+
+    return NextResponse.json({ success: true, data });
+  } catch (err) {
+    console.error('Products API error:', err.message);
+    return NextResponse.json(
+      { success: false, message: err.message },
+      { status: 500 }
+    );
+  }
 }

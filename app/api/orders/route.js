@@ -1,45 +1,56 @@
 import { NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
-
-// In-memory store (use DB in production)
-const orders = [];
+import { saveOrder } from '@/lib/supabase';
 
 function getDeliveryDate(days) {
   const d = new Date();
   d.setDate(d.getDate() + days);
-  return d.toLocaleDateString('en-PK', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  return d.toLocaleDateString('en-PK', {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+  });
 }
 
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { customerName, email, phone, address, city, items, paymentMethod, notes } = body;
+    const { customerName, email, phone, address, city,
+            items, paymentMethod, notes } = body;
 
     if (!customerName || !phone || !address || !city || !items?.length || !paymentMethod) {
-      return NextResponse.json({ success:false, message:'Missing required fields' }, { status:400 });
+      return NextResponse.json(
+        { success: false, message: 'Missing required fields' },
+        { status: 400 }
+      );
     }
 
     const subtotal    = items.reduce((s, i) => s + (i.price * i.quantity), 0);
     const deliveryFee = subtotal >= 10000 ? 0 : 500;
     const total       = subtotal + deliveryFee;
+    const orderId     = `AF-${uuidv4().slice(0,8).toUpperCase()}`;
 
-    const order = {
-      orderId:   `AF-${uuidv4().slice(0,8).toUpperCase()}`,
-      customerName, email, phone, address, city,
-      items, subtotal, deliveryFee, total, paymentMethod,
-      notes: notes || '',
-      status:    'pending',
-      createdAt: new Date().toISOString(),
-    };
+    // Save to Supabase — permanently stored!
+    await saveOrder({
+      order_id:       orderId,
+      customer_name:  customerName,
+      email:          email || '',
+      phone,
+      address,
+      city,
+      items,
+      subtotal,
+      delivery_fee:   deliveryFee,
+      total,
+      payment_method: paymentMethod,
+      notes:          notes || '',
+      status:         'pending',
+    });
 
-    orders.push(order);
+    console.log(`📦 Order saved: ${orderId} — PKR ${total.toLocaleString()} — ${customerName} — ${city}`);
 
-    console.log(`📦 New Order: ${order.orderId} — PKR ${total.toLocaleString()} — ${customerName} — ${paymentMethod}`);
-
-    // WhatsApp notification URL for Alpha Furniture
+    // WhatsApp message for Alpha Furniture (your number)
     const whatsappMsg = encodeURIComponent(
-      `🛒 *New Order Received!*\n\n` +
-      `*Order ID:* ${order.orderId}\n` +
+      `🛒 *New Alpha Furniture Order!*\n\n` +
+      `*Order ID:* ${orderId}\n` +
       `*Customer:* ${customerName}\n` +
       `*Phone:* ${phone}\n` +
       `*City:* ${city}\n` +
@@ -54,11 +65,11 @@ export async function POST(request) {
       success: true,
       message: 'Order placed successfully!',
       data: {
-        orderId:           order.orderId,
-        total:             order.total,
-        subtotal:          order.subtotal,
-        deliveryFee:       order.deliveryFee,
-        status:            order.status,
+        orderId,
+        total,
+        subtotal,
+        deliveryFee,
+        status: 'pending',
         estimatedDelivery: `${getDeliveryDate(5)} — ${getDeliveryDate(7)}`,
         guaranteedBy:      getDeliveryDate(7),
         whatsappUrl:       `https://wa.me/923214877048?text=${whatsappMsg}`,
@@ -68,10 +79,15 @@ export async function POST(request) {
       },
     });
   } catch (err) {
-    return NextResponse.json({ success:false, message:'Server error' }, { status:500 });
+    console.error('Orders error:', err.message);
+    return NextResponse.json(
+      { success: false, message: 'Server error — please try again' },
+      { status: 500 }
+    );
   }
 }
 
 export async function GET() {
-  return NextResponse.json({ success:true, data:orders });
+  // Orders are in Supabase — view them in Supabase Table Editor
+  return NextResponse.json({ success: true, message: 'View orders in Supabase dashboard' });
 }
