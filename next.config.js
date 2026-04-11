@@ -1,16 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  images: {
-    unoptimized: true,
-  },
-  // Proxy /payload-api calls to backend to avoid CORS issues
+  images: { unoptimized: true },
+
   async rewrites() {
+    const payloadUrl = process.env.NEXT_PUBLIC_PAYLOAD_URL || 'http://localhost:3001';
     return [
       {
-        source: '/payload-api/:path*',
-        destination: 'http://localhost:3000/api/:path*',
+        source:      '/payload-api/:path*',
+        destination: `${payloadUrl}/api/:path*`,
       },
     ];
   },
 };
+
 module.exports = nextConfig;
