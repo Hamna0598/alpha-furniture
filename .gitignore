@@ -1,5 +1,8 @@
-node_modules/ 
-.next/ 
-.env.local 
-public/images/ 
-public/images/ 
+node_modules/
+.next/
+.env
+.env.local
+.env.*.local
+.vercel
+.DS_Store
+Thumbs.db

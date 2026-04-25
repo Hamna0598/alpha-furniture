@@ -34,68 +34,13 @@ export default function ProductPage() {
   const [qty, setQty]             = useState(1);
 
   useEffect(() => {
-    fetch(`${PAYLOAD}/api/products?where[slug][equals]=${slug}&depth=2&limit=1`)
+    if (!slug) return;
+    fetch(`/api/products/${slug}`)
       .then(r => r.json())
       .then(j => {
-        const doc = j.docs?.[0];
-        if (!doc) { setLoading(false); return; }
-
-        const firstImage = doc.gallery?.[0]?.image;
-        const imageUrl = firstImage?.url ? `${PAYLOAD}${firstImage.url}` : null;
-        const cat = doc.categories?.[0];
-
-        const description = doc.description?.root?.children
-          ?.map(n => n.children?.map(c => c.text || '').join('') || '')
-          .filter(Boolean).join(' ') || '';
-
-        const mapped = {
-          id:             doc.id,
-          name:           doc.title,
-          slug:           doc.slug,
-          price:          doc.priceInUSD || 0,
-          originalPrice:  0,
-          description,
-          category:       cat?.slug || '',
-          categoryName:   cat?.title || '',
-          image:          imageUrl,
-          images:         (doc.gallery || []).map(g => g.image?.url ? `${PAYLOAD}${g.image.url}` : null).filter(Boolean),
-          inStock:        (doc.inventory || 0) > 0,
-          inventory:      doc.inventory || 0,
-          stockQty:       doc.inventory || 0,
-          rating:         5,
-          reviewCount:    0,
-          colors:         [],
-          specifications: {},
-          isNew:          false,
-        };
-        setProduct(mapped);
-
-        if (cat?.id) {
-          fetch(`${PAYLOAD}/api/products?where[categories][equals]=${cat.id}&where[slug][not_equals]=${slug}&limit=4&depth=2`)
-            .then(r => r.json())
-            .then(j2 => {
-              const rel = (j2.docs || []).map(d => {
-                const img = d.gallery?.[0]?.image;
-                const relCat = d.categories?.[0];
-                return {
-                  id:            d.id,
-                  name:          d.title,
-                  slug:          d.slug,
-                  price:         d.priceInUSD || 0,
-                  originalPrice: 0,
-                  image:         img?.url ? `${PAYLOAD}${img.url}` : null,
-                  images:        (d.gallery || []).map(g => g.image?.url ? `${PAYLOAD}${g.image.url}` : null).filter(Boolean),
-                  category:      relCat?.slug || '',
-                  categoryName:  relCat?.title || '',
-                  inStock:       (d.inventory || 0) > 0,
-                  rating:        5,
-                  reviewCount:   0,
-                  colors:        [],
-                  isNew:         false,
-                };
-              });
-              setRelated(rel);
-            });
+        if (j.success && j.data) {
+          setProduct(j.data);
+          setRelated(j.related || []);
         }
         setLoading(false);
       })

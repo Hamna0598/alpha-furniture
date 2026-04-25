@@ -1,35 +1,36 @@
 import { NextResponse } from 'next/server';
-import { v4 as uuidv4 } from 'uuid';
-import { saveOrder } from '@/lib/supabase';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+);
 
 function getDeliveryDate(days) {
   const d = new Date();
   d.setDate(d.getDate() + days);
-  return d.toLocaleDateString('en-PK', {
-    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-  });
+  return d.toLocaleDateString('en-PK', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+function generateOrderId() {
+  return 'AF-' + Math.random().toString(36).slice(2, 10).toUpperCase();
 }
 
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { customerName, email, phone, address, city,
-            items, paymentMethod, notes } = body;
+    const { customerName, email, phone, address, city, items, paymentMethod, notes } = body;
 
     if (!customerName || !phone || !address || !city || !items?.length || !paymentMethod) {
-      return NextResponse.json(
-        { success: false, message: 'Missing required fields' },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, message: 'Missing required fields' }, { status: 400 });
     }
 
     const subtotal    = items.reduce((s, i) => s + (i.price * i.quantity), 0);
     const deliveryFee = subtotal >= 10000 ? 0 : 500;
     const total       = subtotal + deliveryFee;
-    const orderId     = `AF-${uuidv4().slice(0,8).toUpperCase()}`;
+    const orderId     = generateOrderId();
 
-    // Save to Supabase — permanently stored!
-    await saveOrder({
+    const { error } = await supabase.from('orders').insert({
       order_id:       orderId,
       customer_name:  customerName,
       email:          email || '',
@@ -45,11 +46,13 @@ export async function POST(request) {
       status:         'pending',
     });
 
-    console.log(`📦 Order saved: ${orderId} — PKR ${total.toLocaleString()} — ${customerName} — ${city}`);
+    if (error) {
+      console.error('Supabase insert error:', error.message);
+      return NextResponse.json({ success: false, message: 'Failed to save order' }, { status: 500 });
+    }
 
-    // WhatsApp message for Alpha Furniture (your number)
     const whatsappMsg = encodeURIComponent(
-      `🛒 *New Alpha Furniture Order!*\n\n` +
+      `🛒 *New Order Received!*\n\n` +
       `*Order ID:* ${orderId}\n` +
       `*Customer:* ${customerName}\n` +
       `*Phone:* ${phone}\n` +
@@ -69,7 +72,7 @@ export async function POST(request) {
         total,
         subtotal,
         deliveryFee,
-        status: 'pending',
+        status:            'pending',
         estimatedDelivery: `${getDeliveryDate(5)} — ${getDeliveryDate(7)}`,
         guaranteedBy:      getDeliveryDate(7),
         whatsappUrl:       `https://wa.me/923214877048?text=${whatsappMsg}`,
@@ -78,16 +81,19 @@ export async function POST(request) {
         paymentMethod,
       },
     });
+
   } catch (err) {
-    console.error('Orders error:', err.message);
-    return NextResponse.json(
-      { success: false, message: 'Server error — please try again' },
-      { status: 500 }
-    );
+    console.error('Order error:', err);
+    return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });
   }
 }
 
 export async function GET() {
-  // Orders are in Supabase — view them in Supabase Table Editor
-  return NextResponse.json({ success: true, message: 'View orders in Supabase dashboard' });
+  const { data, error } = await supabase
+    .from('orders')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) return NextResponse.json({ success: false, message: error.message }, { status: 500 });
+  return NextResponse.json({ success: true, data });
 }

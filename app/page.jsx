@@ -27,34 +27,19 @@ export default function HomePage() {
   const [email, setEmail]       = useState('');
   const [subDone, setSubDone]   = useState(false);
 
-  useEffect(() => {
-    const PAYLOAD = process.env.NEXT_PUBLIC_PAYLOAD_URL || 'http://localhost:3000';
-    fetch(`/payload-api/products?limit=12&depth=2&where[_status][equals]=published`)
+useEffect(() => {
+    fetch('/api/products?featured=true&limit=12')
       .then(r => r.json())
       .then(j => {
-        const docs = (j.docs || []).map(doc => {
-          const firstImage = doc.gallery?.[0]?.image;
-          const imageUrl = firstImage?.url ? `${PAYLOAD}${firstImage.url}` : null;
-          const cat = doc.categories?.[0];
-          return {
-            id:       doc.id,
-            name:     doc.title,
-            slug:     doc.slug,
-            price:    doc.price || 0,
-            category: cat?.slug || '',
-            image:    imageUrl,
-            images:   (doc.gallery||[]).map(g => g.image?.url ? `${PAYLOAD}${g.image.url}` : null).filter(Boolean),
-            inStock:  (doc.inventory || 0) > 0,
-          };
-        });
-        setFeatured(docs);
+        if (j.success) setFeatured(j.data);
       })
       .catch(err => console.error('Failed to load products:', err));
   }, []);
 
-  const filtered = filter === 'All' ? featured.slice(0,8) :
-    featured.filter(p => p.category.toLowerCase().includes(filter.toLowerCase())).slice(0,8);
-
+  const filtered = filter === 'All'
+    ? featured.slice(0, 8)
+    : featured.filter(p => p.category.toLowerCase().includes(filter.toLowerCase())).slice(0, 8);
+ 
   return (
     <>
       {/* ── HERO ── */}
@@ -133,9 +118,17 @@ export default function HomePage() {
               ))}
             </div>
           </div>
-          <div className={styles.productsGrid}>
-            {filtered.map(p => <ProductCard key={p.id} product={p} />)}
-          </div>
+          {featured.length === 0 ? (
+            <div className={styles.productsGrid}>
+              {[...Array(8)].map((_, i) => (
+                <div key={i} className="skeleton" style={{ aspectRatio: '4/3', borderRadius: '12px' }} />
+              ))}
+            </div>
+          ) : (
+            <div className={styles.productsGrid}>
+              {filtered.map(p => <ProductCard key={p.id} product={p} />)}
+            </div>
+          )}
           <div className={styles.featuredFooter}>
             <Link href="/shop" className="btn btn--outline btn--lg">View All Products</Link>
           </div>

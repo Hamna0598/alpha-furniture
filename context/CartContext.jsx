@@ -13,6 +13,7 @@ function cartReducer(state, action) {
     case 'REMOVE_ITEM': return { ...state, items: state.items.filter(i => i.cartKey !== action.payload) };
     case 'UPDATE_QTY':  return { ...state, items: state.items.map(i => i.cartKey === action.payload.cartKey ? { ...i, quantity: Math.max(1, action.payload.quantity) } : i) };
     case 'CLEAR_CART':  return { ...state, items: [] };
+    case 'LOAD':        return { ...state, items: action.payload };
     default: return state;
   }
 }
