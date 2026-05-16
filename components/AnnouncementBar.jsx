@@ -14,37 +14,41 @@ export default function AnnouncementBar() {
   const [visible, setVisible] = useState(true);
   if (!visible) return null;
 
-  const ticker = [...MESSAGES, ...MESSAGES].join('   •   ');
+  const ticker = [...MESSAGES, ...MESSAGES].join('   ·   ');
 
   return (
     <aside
       style={{
-        background: 'linear-gradient(90deg, var(--obsidian) 0%, #140f04 50%, var(--obsidian) 100%)',
-        borderBottom: '1px solid rgba(212,168,67,0.25)',
-        padding: '.45rem 0',
+        background: 'linear-gradient(90deg, #070709 0%, #120e06 50%, #070709 100%)',
+        borderBottom: '1px solid rgba(201,150,58,0.22)',
+        padding: '0.48rem 0',
         position: 'relative',
         overflow: 'hidden',
-
-        // ✨ NEW LUXURY EFFECTS
-        backdropFilter: 'blur(6px)',
-        WebkitBackdropFilter: 'blur(6px)',
-        boxShadow: '0 2px 10px rgba(0,0,0,0.4), 0 0 12px rgba(212,168,67,0.15)'
       }}
     >
+      {/* Shimmer border */}
+      <div style={{
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: '1px',
+        background: 'linear-gradient(90deg, transparent, var(--gold), transparent)',
+        opacity: 0.25,
+      }} />
+
       <div style={{ overflow: 'hidden', whiteSpace: 'nowrap' }}>
         <span
           style={{
             display: 'inline-block',
-            animation: 'marquee 45s linear infinite',
+            animation: 'marquee 50s linear infinite',
             fontFamily: 'var(--ff-caps)',
-            fontSize: '.58rem',
-            letterSpacing: '.18em',
+            fontSize: '0.56rem',
+            letterSpacing: '0.2em',
             color: 'var(--gold-light)',
             textTransform: 'uppercase',
             paddingRight: '4rem',
-
-            // ✨ subtle text glow
-            textShadow: '0 0 6px rgba(212,168,67,0.35)'
+            textShadow: '0 0 8px rgba(201,150,58,0.30)',
           }}
         >
           {ticker}
@@ -53,21 +57,24 @@ export default function AnnouncementBar() {
 
       <button
         onClick={() => setVisible(false)}
+        aria-label="Close announcement"
         style={{
           position: 'absolute',
-          right: '.8rem',
+          right: '0.85rem',
           top: '50%',
           transform: 'translateY(-50%)',
-          background: 'none',
-          border: 'none',
-          color: 'rgba(201,168,76,.5)',
+          background: 'rgba(201,150,58,0.08)',
+          border: '1px solid rgba(201,150,58,0.18)',
+          borderRadius: '3px',
+          color: 'rgba(201,150,58,0.45)',
           cursor: 'pointer',
-          fontSize: '.75rem',
-          padding: '4px',
-          transition: 'all 0.2s ease'
+          fontSize: '0.62rem',
+          padding: '2px 6px',
+          transition: 'all 0.2s ease',
+          lineHeight: 1.5,
         }}
-        onMouseEnter={(e) => e.target.style.color = '#d4a843'}
-        onMouseLeave={(e) => e.target.style.color = 'rgba(201,168,76,.5)'}
+        onMouseEnter={e => { e.target.style.color = 'var(--gold)'; e.target.style.borderColor = 'var(--gold)'; }}
+        onMouseLeave={e => { e.target.style.color = 'rgba(201,150,58,0.45)'; e.target.style.borderColor = 'rgba(201,150,58,0.18)'; }}
       >
         ✕
       </button>
