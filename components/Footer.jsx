@@ -60,6 +60,12 @@ export default function Footer() {
                   <Link href={`/shop/${slug}`}>{label}</Link>
                 </li>
               ))}
+
+              <li>
+                <Link href="/mood-shop">
+                  Shop by Mood ✨
+                </Link>
+              </li>
             </ul>
           </nav>
 
@@ -73,6 +79,9 @@ export default function Footer() {
               <li><a href="#">Delivery Policy</a></li>
               <li><a href="#">Returns Policy</a></li>
               <li><a href="#">Warranty Info</a></li>
+              <li>
+              <Link href="/track-order">Track Order</Link>
+              </li>
             </ul>
           </nav>
 

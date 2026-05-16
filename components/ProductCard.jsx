@@ -4,6 +4,7 @@ import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { showToast } from './Toast';
 import styles from './ProductCard.module.css';
+import StockBadge from './StockBadge';
 
 export default function ProductCard({ product }) {
   const { addItem }              = useCart();
@@ -106,6 +107,8 @@ export default function ProductCard({ product }) {
               <span className={styles.original}>PKR {product.originalPrice?.toLocaleString()}</span>
             )}
           </div>
+
+          <StockBadge stockQty={product.stockQty} inStock={product.inStock} size="sm" />
 
           {product.colors?.length > 0 && (
             <div className={styles.colors}>

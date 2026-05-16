@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import styles from './confirmed.module.css';
+import OrderTracker from '@/components/OrderTracker';
 
 const METHOD_LABELS = { cod:'Cash on Delivery', bank_hbl:'Bank Transfer (HBL)', card:'Credit/Debit Card', jazzcash:'JazzCash', easypaisa:'EasyPaisa' };
 
@@ -75,6 +76,11 @@ export default function OrderConfirmedPage() {
               ))}
             </div>
           </div>
+
+          <OrderTracker
+            orderId={order.orderId}
+            orderDate={order.date}
+          />
 
           <div className={styles.receiptSection}>
             <h3>📍 Visit Our Showroom</h3>

@@ -1,0 +1,74 @@
+/* ─────────────────────────────────────────────
+   StockBadge.module.css
+   Location: components/StockBadge.module.css
+   Usage: import in ProductCard and product/[slug]/page.jsx
+──────────────────────────────────────────────── */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--ff-caps);
+  font-size: 0.52rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.65rem;
+  border-radius: 2px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* In Stock */
+.inStock {
+  color: #1a7a46;
+  background: rgba(26, 122, 70, 0.09);
+  border-color: rgba(26, 122, 70, 0.25);
+}
+.inStock .dot {
+  background: #1a7a46;
+  box-shadow: 0 0 5px rgba(26, 122, 70, 0.5);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Limited Stock */
+.limited {
+  color: #9a6200;
+  background: rgba(201, 150, 58, 0.10);
+  border-color: rgba(201, 150, 58, 0.35);
+}
+.limited .dot {
+  background: var(--gold);
+  box-shadow: 0 0 5px rgba(201, 150, 58, 0.5);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+/* Out of Stock */
+.outOfStock {
+  color: #9a2b2b;
+  background: rgba(154, 43, 43, 0.09);
+  border-color: rgba(154, 43, 43, 0.22);
+}
+.outOfStock .dot {
+  background: #c62828;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.6; transform: scale(0.8); }
+}
+
+/* ── Size variants ── */
+.sm  { font-size: 0.48rem; padding: 0.2rem 0.55rem; }
+.sm .dot { width: 5px; height: 5px; }
+
+.lg  { font-size: 0.6rem; padding: 0.35rem 0.9rem; }
+.lg .dot { width: 7px; height: 7px; }

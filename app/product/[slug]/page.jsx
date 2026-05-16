@@ -7,6 +7,8 @@ import { useWishlist } from '@/context/WishlistContext';
 import { showToast } from '@/components/Toast';
 import ProductCard from '@/components/ProductCard';
 import styles from './product.module.css';
+import StockBadge from '@/components/StockBadge';
+import FurnitureBundle from '@/components/FurnitureBundle';
 
 const CAT_LABELS = { beds:'Beds', wardrobes:'Wardrobes', sofas:'Sofas', cornersofas:'Corner Sofas', dining:'Dining Tables', accent:'Accent Chairs' };
 const CAT_SIZES  = {
@@ -138,9 +140,7 @@ export default function ProductPage() {
                   <span className="qty-display">{qty}</span>
                   <button className="qty-btn" onClick={()=>setQty(q=>Math.min(product.stockQty||99,q+1))}>+</button>
                 </div>
-                <span className={`${styles.stock} ${product.inStock?styles.inStock:styles.outStock}`}>
-                  {product.inStock ? `✓ In Stock (${product.stockQty})` : '✗ Out of Stock'}
-                </span>
+                <StockBadge stockQty={product.stockQty} inStock={product.inStock} size="lg" />
               </div>
 
               <div className={styles.ctas}>
@@ -184,6 +184,12 @@ export default function ProductPage() {
             </section>
           )}
         </div>
+
+        {/* Smart Bundle */}
+        <div className="container">
+          <FurnitureBundle product={product} />
+        </div>
+
       </article>
     </>
   );

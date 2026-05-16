@@ -145,8 +145,12 @@ export default function HomePage() {
               <Link href="/about" className="btn btn--outline-light">
                 Our Story
               </Link>
+              <Link href="/mood-shop" className="btn btn--ghost">
+                ✨ Shop by Mood
+              </Link>
             </div>
           </div>
+
 
           {/* Floating stats card */}
           <div className={`${styles.heroStats} ${heroLoaded ? styles.heroStatsVisible : ''}`}>

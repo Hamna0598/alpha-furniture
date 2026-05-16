@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import styles from './checkout.module.css';
+import CouponBox from '@/components/CouponBox';
 
 const METHODS = [
   { value:'cod',       label:'Cash on Delivery',  icon:'💵', desc:'Pay cash at your door — no advance needed', color:'#2D6A4F' },
@@ -18,6 +19,16 @@ export default function CheckoutPage() {
   const router = useRouter();
 
   const [form, setForm] = useState({ customerName:'', email:'', phone:'', address:'', city:'', notes:'' });
+  const [coupon, setCoupon] = useState(null);
+
+  const discountedTotal = coupon
+    ? Math.max(0, total - coupon.discount)
+    : total;
+
+  const effectiveDelivery = coupon?.deliveryFree
+    ? 0
+    : deliveryFee;
+
   const handleChange = e => setForm(f=>({...f,[e.target.name]:e.target.value}));
 
   const selectMethod = method => {
@@ -108,6 +119,14 @@ export default function CheckoutPage() {
             {/* Right: Summary */}
             <aside className={styles.summary}>
               <h2 className={styles.cardTitle}>Order Summary</h2>
+              
+              <CouponBox
+                subtotal={subtotal}
+                applied={coupon}
+                onApply={c => setCoupon(c)}
+                onRemove={() => setCoupon(null)}
+              />
+              
               <ul className={styles.summaryItems}>
                 {items.map(i=>(
                   <li key={i.cartKey} className={styles.summaryItem}>
@@ -124,12 +143,40 @@ export default function CheckoutPage() {
               </ul>
               <div style={{height:'1px',background:'var(--border)',margin:'1rem 0'}}/>
               <table className={styles.totals}>
+
                 <tbody>
-                  <tr><th>Subtotal</th><td>PKR {subtotal.toLocaleString()}</td></tr>
-                  <tr><th>Delivery</th><td className={deliveryFee===0?styles.free:''}>{deliveryFee===0?'FREE 🎉':`PKR ${deliveryFee.toLocaleString()}`}</td></tr>
-                </tbody>
+                  <tr>
+                    <th>Subtotal</th>
+                    <td>PKR {subtotal.toLocaleString()}</td>
+                  </tr>
+
+                  {coupon && (
+                    <tr>
+                      <th style={{ color: '#1a7a46' }}>
+                        Coupon ({coupon.code})
+                      </th>
+                      <td style={{ color: '#1a7a46' }}>
+                        - PKR {coupon.discount.toLocaleString()}
+                      </td>
+                    </tr>
+                  )}
+
+                  <tr>
+                    <th>Delivery</th>
+                    <td className={effectiveDelivery === 0 ? styles.free : ''}>
+                      {effectiveDelivery === 0
+                        ? 'FREE 🎉'
+                        : `PKR ${effectiveDelivery.toLocaleString()}`}
+                    </td>
+                  </tr>
+               </tbody>
+
                 <tfoot>
-                  <tr className={styles.totalRow}><th>Total</th><td>PKR {total.toLocaleString()}</td></tr>
+                  <tr className={styles.totalRow}>
+                    <th>Total</th>
+                    <td>PKR {discountedTotal.toLocaleString()}</td>
+                  </tr>
+                  
                 </tfoot>
               </table>
               <div className={styles.contactBox}>

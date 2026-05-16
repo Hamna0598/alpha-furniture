@@ -1,0 +1,160 @@
+/* ─────────────────────────────────────────────
+   CouponBox.module.css
+   Location: components/CouponBox.module.css
+──────────────────────────────────────────────── */
+
+.couponBox {
+  background: linear-gradient(135deg, rgba(201,150,58,0.04) 0%, transparent 100%);
+  border: 1.5px dashed var(--gold-border);
+  border-radius: var(--radius-sm, 4px);
+  padding: 1.1rem 1.25rem;
+  margin: 1rem 0;
+}
+
+.couponHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--ff-caps, 'Cinzel', serif);
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-light, #524A40);
+  margin-bottom: 0.8rem;
+}
+.couponHeader svg { color: var(--gold); flex-shrink: 0; }
+
+.inputRow {
+  display: flex;
+  gap: 0;
+  border: 1.5px solid var(--border, #DDD4BE);
+  border-radius: 3px;
+  overflow: hidden;
+  transition: border-color 0.25s;
+}
+.inputRow:focus-within { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,150,58,0.08); }
+
+.couponInput {
+  flex: 1;
+  padding: 0.7rem 0.9rem;
+  border: none;
+  background: #fff;
+  font-family: var(--ff-caps, 'Cinzel', serif);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--dark, #0A0A0E);
+  outline: none;
+}
+.couponInput::placeholder {
+  font-family: var(--ff-body, 'DM Sans', sans-serif);
+  font-size: 0.8rem;
+  letter-spacing: 0;
+  color: var(--sand, #C8BAA0);
+  text-transform: none;
+}
+
+.applyBtn {
+  padding: 0 1.4rem;
+  background: linear-gradient(135deg, var(--gold-light, #E2B55A), var(--gold, #C9963A));
+  color: var(--obsidian, #050507);
+  border: none;
+  font-family: var(--ff-caps, 'Cinzel', serif);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s;
+  white-space: nowrap;
+  min-width: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.applyBtn:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--gold-pale, #F0D090), var(--gold-light, #E2B55A));
+}
+.applyBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(0,0,0,0.2);
+  border-top-color: var(--obsidian);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.errorMsg {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  color: #9a2b2b;
+  margin-top: 0.55rem;
+  font-family: var(--ff-body, sans-serif);
+}
+.errorMsg svg { flex-shrink: 0; color: #c62828; }
+
+.hint {
+  font-size: 0.62rem;
+  color: var(--muted, #7A7068);
+  margin-top: 0.6rem;
+  font-family: var(--ff-body, sans-serif);
+  letter-spacing: 0.01em;
+}
+
+/* ── Applied state ── */
+.appliedBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background: rgba(26, 122, 70, 0.06);
+  border: 1.5px solid rgba(26, 122, 70, 0.25);
+  border-radius: var(--radius-sm, 4px);
+  padding: 0.9rem 1.1rem;
+  margin: 1rem 0;
+  animation: slideIn 0.3s ease;
+}
+@keyframes slideIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+
+.appliedLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+.appliedLeft strong {
+  display: block;
+  font-family: var(--ff-caps, 'Cinzel', serif);
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  color: var(--dark, #0A0A0E);
+  text-transform: uppercase;
+}
+.appliedLeft span {
+  display: block;
+  font-size: 0.72rem;
+  color: #1a7a46;
+  font-family: var(--ff-body, sans-serif);
+  margin-top: 1px;
+}
+
+.removeBtn {
+  background: rgba(154, 43, 43, 0.08);
+  border: 1px solid rgba(154, 43, 43, 0.2);
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: #9a2b2b;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+.removeBtn:hover { background: rgba(154, 43, 43, 0.15); border-color: #c62828; }
